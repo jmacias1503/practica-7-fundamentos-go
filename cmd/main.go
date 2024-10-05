@@ -8,20 +8,15 @@ import (
 )
 
 type User struct {
-	Id string `json:"id"`
+	Id int `json:"id"`
 	Name string `json:"name"`
 	Email string `json:"email"`
 }
 
 func main() {
 	router := gin.Default()
-	users := []User {
-		User{
-			Id: "snoatehueoa",
-			Name: "Alfredo",
-			Email: "alfredo@mail.com",
-		},
-	}
+	indexUser := 1
+	var users []User
 	fmt.Println("Running app")
 	router.LoadHTMLGlob("templates/*")
 	router.GET("/ping", func(c *gin.Context) {
