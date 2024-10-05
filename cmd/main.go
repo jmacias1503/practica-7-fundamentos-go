@@ -43,5 +43,25 @@ func main() {
 			})
 		}
 	})
+	router.DELETE("/api/users/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		idParsed, err := strconv.Atoi(id)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": "invalid id",
+			})
+		}
+		fmt.Println("Id a borrar: ", id)
+		for i, user := range users {
+			if user.Id ==  idParsed {
+				users = append(users[:i], users[i+1:]...)
+				c.JSON(200, gin.H{
+					"message": "User deleted",
+				})
+				return
+			}
+		}
+		c.JSON(201, gin.H{})
+	})
 	router.Run(":8000") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
