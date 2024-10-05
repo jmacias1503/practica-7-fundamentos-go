@@ -35,5 +35,17 @@ func main() {
 	router.GET("/api/users", func(c *gin.Context) {
 		c.JSON(200, users)
 	})
+	router.POST("/api/users", func(c *gin.Context) {
+		var user User
+		if c.BindJSON(&user) == nil {
+			user.Id = indexUser
+			users = append(users, user)
+			indexUser++
+		} else {
+			c.JSON(400, gin.H{
+				"error": "Invalid payload",
+			})
+		}
+	})
 	router.Run(":8000") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
