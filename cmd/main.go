@@ -63,5 +63,35 @@ func main() {
 		}
 		c.JSON(201, gin.H{})
 	})
+
+	router.PUT("/api/users/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		idParsed, err := strconv.Atoi(id)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": "invalid id",
+			})
+			return
+		}
+			var user User
+			err = c.BindJSON(&user)
+			if err != nil {
+				c.JSON(400, gin.H{
+					"error": "Invalid payload",
+				})
+				return
+			}
+		fmt.Println("Id a actualizar: ", id)
+		for i, u := range users {
+			if u.Id ==  idParsed {
+				users[i] = user
+				users[i].Id = idParsed
+				c.JSON(200, users[i])
+				return
+			}
+		}
+		c.JSON(201, gin.H{})
+	})
+
 	router.Run(":8000") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
