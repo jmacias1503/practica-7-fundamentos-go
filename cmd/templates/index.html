@@ -6,10 +6,19 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="">
 		
-		<title>Pagina con Gin</title>
+		<title>{{ .title }}</title>
 	</head>
 	<body>
 		<h1>Hola mundo</h1>
 		<p>Esta es mi primera pagina con <a href="https://gin-gonic.com">Gin</a></p>
+		<h2>Total de usuarios registrados</h2>
+		<p>Num de usuarios: {{ .total_users }}</p>
+		<h3>Lista de usuarios</h3>
+		{{ range .users}}
+		<ul>
+			<li>{{ .Name }} - {{ .Email }}</li>
+		</ul>
+		{{ end }}
 	</body>
 </html>
+{{ end }}

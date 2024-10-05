@@ -26,7 +26,11 @@ func main() {
 		})
 	})
 	router.GET("/", func(c *gin.Context) {
-		c.HTML(200, "index.html", gin.H{})
+		c.HTML(200, "index.html", gin.H{
+			"title": "My first Go website with gin",
+			"total_users": len(users),
+			"users": users,
+		})
 	})
 	router.GET("/api/users", func(c *gin.Context) {
 		c.JSON(200, users)
