@@ -10,10 +10,14 @@ import (
 func main() {
   r := gin.Default()
   fmt.Println("Running app")
+  r.LoadHTMLGlob("templates/*")
   r.GET("/ping", func(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{
       "message": "pong",
     })
+  })
+  r.GET("/", func(c *gin.Context) {
+	  c.HTML(200, "index.html", gin.H{})
   })
   r.Run(":8000") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
