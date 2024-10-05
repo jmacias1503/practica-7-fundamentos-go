@@ -1,3 +1,5 @@
 # practica-7-fundamentos-go
 
-El primer commit del terror
+## TAREA
+
+Implementar con una base de datos el registro de usuarios
