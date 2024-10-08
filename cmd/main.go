@@ -6,15 +6,24 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type User struct {
-	Id int `json:"id"`
-	Name string `json:"name"`
-	Email string `json:"email"`
+	gorm.Model
+	Id int 
+	Name string 
+	Email string 
 }
 
 func main() {
+	dsn := "dburl"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("Error connecting to DB")
+	}
+	db.AutoMigrate(&User{})
 	router := gin.Default()
 	indexUser := 1
 	var users []User
