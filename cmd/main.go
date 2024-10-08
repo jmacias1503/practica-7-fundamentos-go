@@ -87,14 +87,14 @@ func main() {
 			})
 			return
 		}
-		var user User
-		err = c.BindJSON(&user)
-		if err != nil {
-			c.JSON(400, gin.H{
-				"error": "Invalid payload",
-			})
-			return
-		}
+			var user User
+			err = c.BindJSON(&user)
+			if err != nil {
+				c.JSON(400, gin.H{
+					"error": "Invalid payload",
+				})
+				return
+			}
 		fmt.Println("Id a actualizar: ", id)
 		for i, u := range users {
 			if u.Id ==  idParsed {
