@@ -25,7 +25,6 @@ func main() {
 	}
 	db.AutoMigrate(&User{})
 	router := gin.Default()
-	indexUser := 1
 	var users []User
 	fmt.Println("Running app")
 	router.LoadHTMLGlob("templates/*")
@@ -42,14 +41,15 @@ func main() {
 		})
 	})
 	router.GET("/api/users", func(c *gin.Context) {
+		var users []User
+		db.Find(&users)
 		c.JSON(200, users)
 	})
 	router.POST("/api/users", func(c *gin.Context) {
 		var user User
 		if c.BindJSON(&user) == nil {
-			user.Id = indexUser
-			users = append(users, user)
-			indexUser++
+			db.Create(&user)
+			c.JSON(201, user)
 		} else {
 			c.JSON(400, gin.H{
 				"error": "Invalid payload",
@@ -58,35 +58,26 @@ func main() {
 	})
 	router.DELETE("/api/users/:id", func(c *gin.Context) {
 		id := c.Param("id")
-		idParsed, err := strconv.Atoi(id)
+		var user User
+		err := db.First(&user, id).Error
 		if err != nil {
 			c.JSON(400, gin.H{
 				"error": "invalid id",
 			})
 		}
-		fmt.Println("Id a borrar: ", id)
-		for i, user := range users {
-			if user.Id ==  idParsed {
-				users = append(users[:i], users[i+1:]...)
-				c.JSON(200, gin.H{
-					"message": "User deleted",
-				})
-				return
-			}
-		}
-		c.JSON(201, gin.H{})
+		db.Delete(&user)
+		c.JSON(201, gin.H{"message": "User deleted"})
 	})
 
 	router.PUT("/api/users/:id", func(c *gin.Context) {
 		id := c.Param("id")
-		idParsed, err := strconv.Atoi(id)
-		if err != nil {
-			c.JSON(400, gin.H{
-				"error": "invalid id",
-			})
-			return
-		}
 			var user User
+			err := db.First(&user, id).Error
+			if err != nil {
+				c.JSON(404, gin.H{
+					"error": "User not found",
+				})
+			}
 			err = c.BindJSON(&user)
 			if err != nil {
 				c.JSON(400, gin.H{
@@ -94,15 +85,7 @@ func main() {
 				})
 				return
 			}
-		fmt.Println("Id a actualizar: ", id)
-		for i, u := range users {
-			if u.Id ==  idParsed {
-				users[i] = user
-				users[i].Id = idParsed
-				c.JSON(200, users[i])
-				return
-			}
-		}
+			db.Save(&user)
 		c.JSON(201, gin.H{})
 	})
 
