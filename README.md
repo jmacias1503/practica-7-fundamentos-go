@@ -1,9 +1,3 @@
 # practica-7-fundamentos-go
 
-## TAREA
-
-Implementar con una base de datos el registro de usuarios
-
-Libreria a implementar la conexion con la base de datos: GORM
-
-- Crear usuarios en la DB cuando se le pida
+- API CRUD para escribir los datos de usuario a una base de datos PostgresQL
