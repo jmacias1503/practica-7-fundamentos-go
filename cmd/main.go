@@ -25,7 +25,6 @@ func main() {
 	}
 	db.AutoMigrate(&User{})
 	router := gin.Default()
-	var users []User
 	fmt.Println("Running app")
 	router.LoadHTMLGlob("templates/*")
 	router.GET("/ping", func(c *gin.Context) {
@@ -34,9 +33,13 @@ func main() {
 		})
 	})
 	router.GET("/", func(c *gin.Context) {
+		var count int64
+		var users []User
+		db.Find(&users)
+		db.Model(&users).Count(&count)
 		c.HTML(200, "index.html", gin.H{
 			"title": "My first Go website with gin",
-			"total_users": len(users),
+			"total_users": count,
 			"users": users,
 		})
 	})
